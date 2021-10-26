@@ -101,3 +101,27 @@ ggplot(data= compact_suv_subset, aes(sample= cty)) +
 
 ```
 
+```{r}
+car_stats <- compact_suv_subset %>%
+  group_by(class) %>%
+  summarize(mean_city =mean(cty),
+            sd_city= sd(cty),
+            sample_size = n ())
+
+car_stats
+
+```
+
+```{r}
+compact_sample <- compact_suv_subset %>%
+  filter( class == "compact") %>%
+  pull(cty)
+
+suv_sample <- compact_suv_subset %>%
+  filter( class == "suv") %>%
+          pull(cty)
+cars_t <- t.test(compact_sample, suv_sample)
+
+```
+
+Here, we reject the null hypothesis! There is a significant difference in mean gas mileage for compact cars and suvs (t(`r cars_t$parameter`) = `r cars_t$statistic`, p<0.001, $\alpha$ = 0.05.
