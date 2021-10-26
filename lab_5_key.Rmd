@@ -76,3 +76,28 @@ trees_t <- t.test(oak_trees, pine_trees)
 
 The p-value `r trees_t$p.value` means that there is a `r (trees_t$p.value) * 100`% that IF these are drawn from populations with the same mean height, that there is the same chance of taking samples again and finding means that are AT LEAST as different.
  
+ 
+ 
+ ## Example 2
+ 
+ Using the `mpg` dataset comparing city gas milage for SUVs and compact cars.
+ 
+```{r}
+compact_suv_subset <- mpg %>%
+  filter(class %in% c("suv", "compact"))
+# used unique(mpg$class) to find class options
+
+```
+ 
+ 
+```{r}
+ggplot(compact_suv_subset, aes(x=cty)) +
+  geom_histogram(bins=12) +
+  facet_wrap(~class)
+
+ggplot(data= compact_suv_subset, aes(sample= cty)) +
+  geom_qq() +
+  facet_wrap(~class)
+
+```
+
