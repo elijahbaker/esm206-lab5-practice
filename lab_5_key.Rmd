@@ -1,0 +1,78 @@
+---
+title: "Lab 5"
+author: "E Baker"
+date: "10/26/2021"
+output: 
+  html_document: 
+    toc: yes
+    theme: journal
+    number_sections: yes
+    code_folding: hide
+---
+
+```{r setup, include=TRUE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+# Confidence intervals 
+
+In this section, we will learn to use the t.test() function as a way to return the confidence interval via the t-distribution.
+
+confidence interval of 95 means that if we took multiple samples, we would expect that 95% of the samples shows a population within our mean
+
+## Example 1
+
+Create a mock sample of observation values and find the confidence interval. Then we'll learn how to report that.
+
+```{r}
+pika_mass <- c(8200, 97, 110, 83, 91, 101, 88)
+## 82 changed to 820o for a test below
+pika_mean <- mean(pika_mass)
+
+pika_sd <- sd(pika_mass)
+
+pika_ca<- t.test(pika_mass)
+pika_ca
+```
+
+### Risky and tedious way: 
+Mean pika mass at Paiute Pass is 93.14286 $\pm$ 10.2 g (mean $\pm$ 1 standard deviation, n=7) with a 95% confidence interval of [83.8, 102.5]g.
+
+### High initial investment, but BETTER way
+
+In-line code referencing to stored objects!
+
+Use a single backtick on either side of a lowercase "r" to create an in-line bit of code
+
+Mean pika mass at Paiute Pass is `r pika_mean`
+
+Mean pika mass at Paiute Pass (rounded) is `r round(pika_mean, 1)` g $\pm$ `r round(pika_sd, 1)` g (mean $\pm$ 1 standard deviation, n=  `r length(pika_mass)`) with  95% confidence interval of [`r pika_ci$conf.int[1], 1)`, `r round(pika_ci$conf.int[2], 1)`] g.
+
+
+# two sample t-test
+
+Use a two-sample t-test to test the null hypothesis that samples were drawn from population swith the same mean (difference in means = 0)
+
+- H0: Means difference = 0
+- HA: means difference is NOT 0
+
+This is a two-sided t-test because no directionality is implied
+
+## Example 1
+
+```{r}
+
+oak_trees <- c(20, 22, 25, 31, 27, 33, 35, 28)
+
+pine_trees <- c(41, 46, 55, 68, 57, 61, 48)
+```
+
+ Is there a significant difference in mean heights between oak and pine trees?
+ 
+```{r}
+
+trees_t <- t.test(oak_trees, pine_trees)
+```
+
+The p-value `r trees_t$p.value` means that there is a `r (trees_t$p.value) * 100`% that IF these are drawn from populations with the same mean height, that there is the same chance of taking samples again and finding means that are AT LEAST as different.
+ 
